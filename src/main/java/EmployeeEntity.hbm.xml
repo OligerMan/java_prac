@@ -4,7 +4,7 @@
     "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 
-    <class name="com.example.java_prac.entities.EmployeeEntity" table="employee" schema="public" catalog="postgres">
+    <class name="EmployeeEntity" table="employee" schema="public" catalog="postgres">
         <id name="empId">
             <column name="emp_id" sql-type="integer"/>
         </id>
