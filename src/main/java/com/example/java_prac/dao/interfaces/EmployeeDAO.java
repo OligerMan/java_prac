@@ -9,6 +9,8 @@ public interface EmployeeDAO {
 
     void addEmployee(EmployeeEntity employee);
 
+    void updateEmployee(EmployeeEntity emp_position);
+
     void deleteEmployee(EmployeeEntity employee);
 
     List<EmployeeEntity> getEmployeeListByFilter(EmployeeDAOImpl.Filter filter);

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <script>
+        function find_get_parameter(parameter_name) {
+            var result = null,
+                tmp = [];
+            location.search
+                .substr(1)
+                .split("&")
+                .forEach(function (item) {
+                    tmp = item.split("=");
+                    if (tmp[0] === parameter_name) result = decodeURIComponent(tmp[1]);
+                });
+            return result;
+        }
+
+        let update_division_data = function () {
+            let xhr = new XMLHttpRequest();
+            let url = new URL("https://google.com/search");
+            let val = find_get_parameter("division_id")
+            if (val != null && val.length !== 0) {
+                url.searchParams.set('id', val);
+            }
+            xhr.open("GET", "get_div_data" + url.toString().substring(25));
+            xhr.send();
+            xhr.onload = function () {
+                document.getElementById("division_data").innerHTML = xhr.response
+            };
+        };
+        update_division_data();
+    </script>
+</head>
+<body>
+<div class="global_wrapper">
+    <div>
+        <div class="title">
+            <h1>Система информации о персонале компании</h1>
+        </div>
+        <a href="/main">Главная</a>
+        <a href="/divisions">Список подразделений</a>
+        <a href="/employees">Список служащих</a>
+    </div>
+    <div class="content">
+        <div id="division_data"></div>
+        <h2>Обновить или удалить данные о подразделении:</h2>
+        <input type="button" id="update_button" value="Обновить">
+        <script>
+            update_button.onclick = function() {
+                if (document.getElementById("div_name_input").value.length !== 0 &&
+                    document.getElementById("division_list").value.length !== 0 &&
+                    document.getElementById("division_list").value.length !== 0) {
+
+                    let xhr = new XMLHttpRequest();
+                    let url = new URL("https://google.com/search");
+                    url.searchParams.set('div_id', find_get_parameter("division_id"));
+                    url.searchParams.set('div_name', document.getElementById("div_name_input").value);
+                    url.searchParams.set('emp_info', document.getElementById("employee_list").value);
+                    url.searchParams.set('higher_info', document.getElementById("division_list").value);
+
+                    xhr.open("GET", "update_div_data" + url.toString().substring(25));
+                    xhr.send();
+                    xhr.onload = update_division_data
+                }
+            };
+        </script>
+        <input type="button" id="delete_button" value="Удалить">
+        <script>
+            delete_button.onclick = function() {
+                let xhr = new XMLHttpRequest();
+                let url = new URL("https://google.com/search");
+                url.searchParams.set('div_id', find_get_parameter("division_id"));
+
+                xhr.open("GET", "delete_div_data" + url.toString().substring(25));
+                xhr.send();
+                xhr.onload = function () {
+                    window.location.href = "/divisions";
+                };
+            };
+        </script>
+    </div>
+</div>
+</body>
+</html>

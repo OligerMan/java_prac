@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <script>
+        let get_replacement = function(elem_id, get_id, params) {
+            return function() {
+                let xhr = new XMLHttpRequest();
+                xhr.open("GET", get_id)
+                xhr.send()
+                xhr.onload = function () {
+                    document.getElementById(elem_id).innerHTML = xhr.response
+                };
+            };
+        };
+        window.onload = get_replacement("employees_list", "get_emp_list");
+    </script>
+</head>
+<body>
+<div class="global_wrapper">
+    <div>
+        <div class="title">
+            <h1>Система информации о персонале компании</h1>
+        </div>
+        <a href="/main">Главная</a>
+        <a href="/divisions">Список подразделений</a>
+        <a href="/employees">Список служащих</a>
+    </div>
+    <div class="content">
+        <h2>Список работников:</h2>
+        <div id="employees_list"></div>
+        <div>Фильтры:</div>
+        <label for="employee_id">ID работника:</label><input id="employee_id" type="text" size="40"><br>
+        <label for="employee_name">Имя работника:</label><input id="employee_name" type="text" size="40"><br>
+        <label for="employee_address">Адрес работника:</label><input id="employee_address" type="text" size="40"><br>
+        <input type="button" id="button" value="Кнопка">
+        <script>
+            button.onclick = function() {
+                let xhr = new XMLHttpRequest();
+                let url = new URL("https://google.com/search");
+                if (document.getElementById("employee_id").value.length !== 0) {
+                    url.searchParams.set('id', document.getElementById("employee_id").value);
+                }
+                if (document.getElementById("employee_name").value.length !== 0) {
+                    url.searchParams.set('name', document.getElementById("employee_name").value);
+                }
+                if (document.getElementById("employee_address").value.length !== 0) {
+                    url.searchParams.set('address', document.getElementById("employee_address").value);
+                }
+                xhr.open("GET", "get_emp_list" + url.toString().substring(25));
+                xhr.send();
+                xhr.onload = function () {
+                    document.getElementById("employees_list").innerHTML = xhr.response};
+            };
+        </script>
+
+        <h2>Создание подразделения:</h2>
+        <label for="employee_name_add">Имя служащего:</label><input id="employee_name_add" type="text" size="40"><br>
+        <input type="button" id="add_button" value="Создать служащего">
+        <script>
+            add_button.onclick = function() {
+                if (document.getElementById("employee_name_add").value.length !== 0) {
+                    let xhr = new XMLHttpRequest();
+                    let url = new URL("https://google.com/search");
+                    url.searchParams.set('name', document.getElementById("employee_name_add").value);
+
+                    xhr.open("GET", "add_employee" + url.toString().substring(25));
+                    xhr.send();
+                    xhr.onload = function () {
+                        get_replacement("employees_list", "get_emp_list")();
+                    };
+                }
+            };
+        </script>
+    </div>
+</div>
+</body>
+</html>

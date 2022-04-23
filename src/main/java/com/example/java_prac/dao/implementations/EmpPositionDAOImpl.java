@@ -3,7 +3,6 @@ package com.example.java_prac.dao.implementations;
 import com.example.java_prac.HibernateInstance;
 import com.example.java_prac.dao.interfaces.EmpPositionDAO;
 import com.example.java_prac.entities.EmpPositionEntity;
-import com.example.java_prac.entities.EmployeeEntity;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.Session;
@@ -19,7 +18,7 @@ import java.util.List;
 public class EmpPositionDAOImpl implements EmpPositionDAO {
     @Getter
     @Setter
-    public class Filter {
+    public static class Filter {
         long id = -1;
         long unitId = -1;
         long empId = -1;
@@ -47,11 +46,20 @@ public class EmpPositionDAOImpl implements EmpPositionDAO {
     }
 
     @Override
-    public List<EmployeeEntity> getEmpPositionListByFilter(Filter filter) {
+    public void updateEmpPosition(EmpPositionEntity emp_position) {
+        Session session = HibernateInstance.getSessionFactory().openSession();
+        session.beginTransaction();
+        session.update(emp_position);
+        session.getTransaction().commit();
+        session.close();
+    }
+
+    @Override
+    public List<EmpPositionEntity> getEmpPositionListByFilter(Filter filter) {
         try (Session session = HibernateInstance.getSessionFactory().openSession()) {
             CriteriaBuilder builder = session.getCriteriaBuilder();
-            CriteriaQuery<EmployeeEntity> criteriaQuery = builder.createQuery(EmployeeEntity.class);
-            Root<EmployeeEntity> root = criteriaQuery.from(EmployeeEntity.class);
+            CriteriaQuery<EmpPositionEntity> criteriaQuery = builder.createQuery(EmpPositionEntity.class);
+            Root<EmpPositionEntity> root = criteriaQuery.from(EmpPositionEntity.class);
 
             List<Predicate> predicates = new ArrayList<>();
             if (filter.getId() != -1) {

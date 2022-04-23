@@ -15,9 +15,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EmployeeDAOImpl implements EmployeeDAO {
+    public static EmployeeDAOImpl.Filter Filter;
+
     @Getter
     @Setter
-    public class Filter {
+    public static class Filter {
         long id = -1;
         String name = null;
         long currentPositionId = -1;
@@ -28,6 +30,15 @@ public class EmployeeDAOImpl implements EmployeeDAO {
         Session session = HibernateInstance.getSessionFactory().openSession();
         session.beginTransaction();
         session.save(employee);
+        session.getTransaction().commit();
+        session.close();
+    }
+
+    @Override
+    public void updateEmployee(EmployeeEntity emp_position) {
+        Session session = HibernateInstance.getSessionFactory().openSession();
+        session.beginTransaction();
+        session.update(emp_position);
         session.getTransaction().commit();
         session.close();
     }

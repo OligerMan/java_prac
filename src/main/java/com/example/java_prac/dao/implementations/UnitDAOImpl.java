@@ -2,7 +2,6 @@ package com.example.java_prac.dao.implementations;
 
 import com.example.java_prac.HibernateInstance;
 import com.example.java_prac.dao.interfaces.UnitDAO;
-import com.example.java_prac.entities.EmployeeEntity;
 import com.example.java_prac.entities.UnitEntity;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,7 +17,7 @@ import java.util.List;
 public class UnitDAOImpl implements UnitDAO {
     @Getter
     @Setter
-    public class Filter {
+    public static class Filter {
         long id = -1;
         long directorId = -1;
         long higherUnitId = -1;
@@ -44,11 +43,20 @@ public class UnitDAOImpl implements UnitDAO {
     }
 
     @Override
-    public List<EmployeeEntity> getUnitListByFilter(Filter filter) {
+    public void updateUnit(UnitEntity unit) {
+        Session session = HibernateInstance.getSessionFactory().openSession();
+        session.beginTransaction();
+        session.update(unit);
+        session.getTransaction().commit();
+        session.close();
+    }
+
+    @Override
+    public List<UnitEntity> getUnitListByFilter(Filter filter) {
         try (Session session = HibernateInstance.getSessionFactory().openSession()) {
             CriteriaBuilder builder = session.getCriteriaBuilder();
-            CriteriaQuery<EmployeeEntity> criteriaQuery = builder.createQuery(EmployeeEntity.class);
-            Root<EmployeeEntity> root = criteriaQuery.from(EmployeeEntity.class);
+            CriteriaQuery<UnitEntity> criteriaQuery = builder.createQuery(UnitEntity.class);
+            Root<UnitEntity> root = criteriaQuery.from(UnitEntity.class);
 
             List<Predicate> predicates = new ArrayList<>();
             if (filter.getId() != -1) {

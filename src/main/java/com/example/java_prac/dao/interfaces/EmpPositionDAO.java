@@ -12,7 +12,9 @@ public interface EmpPositionDAO {
 
     void deleteEmpPosition(EmpPositionEntity emp_position);
 
-    List<EmployeeEntity> getEmpPositionListByFilter(EmpPositionDAOImpl.Filter filter);
+    void updateEmpPosition(EmpPositionEntity emp_position);
+
+    List<EmpPositionEntity> getEmpPositionListByFilter(EmpPositionDAOImpl.Filter filter);
 
     EmpPositionEntity getEmpPositionByID(long unit_id);
 

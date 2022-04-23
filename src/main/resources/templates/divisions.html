@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <script>
+        let get_replacement = function(elem_id, get_id) {
+            return function() {
+                let xhr = new XMLHttpRequest();
+                xhr.open("GET", get_id)
+                xhr.send()
+                xhr.onload = function () {
+                    document.getElementById(elem_id).innerHTML = xhr.response
+                };
+            };
+        };
+        let onload_func = function () {
+            get_replacement("divisions_list", "get_div_list")();
+            get_replacement("employee_list", "get_emp_select_list")();
+        };
+        window.onload = onload_func
+    </script>
+</head>
+<body>
+<div class="global_wrapper">
+    <div>
+        <div class="title">
+            <h1>Система информации о персонале компании</h1>
+        </div>
+        <a href="/main">Главная</a>
+        <a href="/divisions">Список подразделений</a>
+        <a href="/employees">Список служащих</a>
+    </div>
+    <div class="content">
+
+        <h2>Список подразделений:</h2>
+        <div id="divisions_list"></div>
+        <div>Фильтры:</div>
+        <label for="division_id">ID подразделения:</label><input id="division_id" type="text" size="40"><br>
+        <label for="division_name">Название подразделения:</label><input id="division_name" type="text" size="40"><br>
+        <label for="division_higher_id">ID вышестоящего подразделения:</label><input id="division_higher_id" type="text" size="40"><br>
+        <input type="button" id="button" value="Кнопка">
+        <script>
+            button.onclick = function() {
+                let xhr = new XMLHttpRequest();
+                let url = new URL("https://google.com/search");
+                if (document.getElementById("division_id").value.length !== 0) {
+                    url.searchParams.set('id', document.getElementById("division_id").value);
+                }
+                if (document.getElementById("division_name").value.length !== 0) {
+                    url.searchParams.set('name', document.getElementById("division_name").value);
+                }
+                if (document.getElementById("division_higher_id").value.length !== 0) {
+                    url.searchParams.set('higher_id', document.getElementById("division_higher_id").value);
+                }
+                xhr.open("GET", "get_div_list" + url.toString().substring(25));
+                xhr.send();
+                xhr.onload = function () {
+                    document.getElementById("divisions_list").innerHTML = xhr.response};
+            };
+        </script>
+        <h2>Создание подразделения:</h2>
+        <label for="division_name_add">Название подразделения:</label><input id="division_name_add" type="text" size="40"><br>
+        <label for="employee_list">Выбор директора:</label><select size="1" id="employee_list"></select><br>
+        <input type="button" id="add_button" value="Создать подразделение">
+        <script>
+            add_button.onclick = function() {
+                if (document.getElementById("division_name_add").value.length !== 0 &&
+                    document.getElementById("employee_list").value.length !== 0) {
+                    let xhr = new XMLHttpRequest();
+                    let url = new URL("https://google.com/search");
+                    url.searchParams.set('name', document.getElementById("division_name_add").value);
+                    url.searchParams.set('dir_info', document.getElementById("employee_list").value);
+
+                    xhr.open("GET", "add_division" + url.toString().substring(25));
+                    xhr.send();
+                    xhr.onload = function () {
+                        get_replacement("divisions_list", "get_div_list")();
+                    };
+                }
+            };
+        </script>
+    </div>
+</div>
+</body>
+</html>

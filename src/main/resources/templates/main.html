@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <script>
+        let get_replacement = function(elem_id, get_id) {
+            return function() {
+                let xhr = new XMLHttpRequest();
+                xhr.open("GET", get_id)
+                xhr.send()
+                xhr.onload = function () {
+                    document.getElementById(elem_id).innerHTML = xhr.response
+                };
+            };
+        };
+    </script>
+</head>
+<body>
+<div class="global_wrapper">
+    <div>
+        <div class="title">
+            <h1>Система информации о персонале компании</h1>
+        </div>
+        <a href="/main">Главная</a>
+        <a href="/divisions">Список подразделений</a>
+        <a href="/employees">Список служащих</a>
+    </div>
+    <div class="content">
+        <div>Главная страница, получается....</div>
+        <div>Hm, I need write smth here....</div>
+        <div>Lorem ipsum</div>
+        <div>Lorem ipsum</div>
+        <div>Lorem ipsum</div>
+        <div>Lorem ipsum</div>
+        <select size="1" id="list">
+            <option>Чебурашка</option>
+            <option>Крокодил Гена</option>
+            <option>Шапокляк</option>
+            <option>Крыса Лариса</option>
+        </select>
+        <table>
+            <tr><th>текст заголовка</th><th>текст заголовка</th></tr> <!--ряд с ячейками заголовков-->
+            <tr><td>данные</td><td>данные</td></tr> <!--ряд с ячейками тела таблицы-->
+        </table>
+    </div>
+</div>
+</body>
+</html>

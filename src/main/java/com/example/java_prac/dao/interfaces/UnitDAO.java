@@ -11,7 +11,9 @@ public interface UnitDAO {
 
     void deleteUnit(UnitEntity unit);
 
-    List<EmployeeEntity> getUnitListByFilter(UnitDAOImpl.Filter filter);
+    void updateUnit(UnitEntity unit);
+
+    List<UnitEntity> getUnitListByFilter(UnitDAOImpl.Filter filter);
 
     UnitEntity getUnitByID(long unit_id);
 
