@@ -74,16 +74,60 @@ class DAOImplTest {
 
         // assert tests
         EmployeeEntity get_emp = e_dao.getEmployeeByName("Ivan");
+        int get_emp_id = get_emp.getEmpId();
+        int get_emp_pos_id = get_emp.getCurrentPositionId();
         Assertions.assertEquals(get_emp.getHomeAddress(), "RF, Moscow");
+        get_emp.setEmpName("Voldemort");
+        get_emp.setHomeAddress("GB, London");
+        e_dao.updateEmployee(get_emp);
+        Assertions.assertEquals(get_emp.getEmpName(), "Voldemort");
+        get_emp = e_dao.getEmployeeByID(get_emp_id);
+        Assertions.assertEquals(get_emp.getEmpName(), "Voldemort");
+        Assertions.assertEquals(get_emp.getHomeAddress(), "GB, London");
+        Assertions.assertEquals(get_emp.getCurrentPositionId(), get_emp_pos_id);
+        get_emp = e_dao.getEmployeeByCurrentPositionID(get_emp_pos_id);
+        Assertions.assertEquals(get_emp.getEmpName(), "Voldemort");
+        EmployeeDAOImpl.Filter e_dao_filter = new EmployeeDAOImpl.Filter();
+        e_dao_filter.setId(get_emp_id);
+        get_emp = e_dao.getEmployeeListByFilter(e_dao_filter).get(0);
+        Assertions.assertEquals(get_emp.getEmpName(), "Voldemort");
+
 
         UnitEntity get_unit = u_dao.getUnitByDirectorID(get_emp.getEmpId());
         Assertions.assertNull(get_unit);
 
         UnitEntity get_unit2 = u_dao.getUnitByDirectorID(emp2.getEmpId());
+        int unit_id = get_unit2.getUnitId();
+        int higher_unit_id = get_unit2.getHigherUnitId();
+        int unit_dir_id = get_unit2.getDirectorId();
         Assertions.assertEquals(get_unit2.getUnitName(), "Unit1");
+        get_unit2 = u_dao.getUnitByID(unit_id);
+        Assertions.assertEquals(get_unit2.getUnitName(), "Unit1");
+        get_unit2 = u_dao.getUnitListByHigherUnitID(higher_unit_id).get(0);
+        Assertions.assertEquals(get_unit2.getUnitName(), "Unit1");
+        UnitDAOImpl.Filter u_dao_filter = new UnitDAOImpl.Filter();
+        u_dao_filter.setDirectorId(unit_dir_id);
+        get_unit2 = u_dao.getUnitListByFilter(u_dao_filter).get(0);
+        Assertions.assertEquals(get_unit2.getUnitName(), "Unit1");
+        get_unit2.setUnitName("Army of Evil");
+        u_dao.updateUnit(get_unit2);
+        Assertions.assertEquals(get_unit2.getUnitName(), "Army of Evil");
 
         List<EmpPositionEntity> get_pos = p_dao.getEmpPositionListByUnitID(get_unit2.getUnitId());
+        int pos_id = get_pos.get(0).getPosId();
+        String p_name = get_pos.get(0).getPosName();
+        Timestamp p_st_time = get_pos.get(0).getStartTimestamp();
+        String p_desc = get_pos.get(0).getPosDesc();
         Assertions.assertEquals(get_pos.size(), 3);
+        EmpPositionDAOImpl.Filter p_dao_filter = new EmpPositionDAOImpl.Filter();
+        p_dao_filter.setPosName(p_name);
+        get_pos = p_dao.getEmpPositionListByFilter(p_dao_filter);
+        Assertions.assertEquals(get_pos.size(), 1);
+        EmpPositionEntity get_pos_ent = p_dao.getEmpPositionByID(pos_id);
+        Assertions.assertEquals(get_pos_ent.getStartTimestamp(), p_st_time);
+        Assertions.assertEquals(get_pos_ent.getPosDesc(), p_desc);
+        get_pos = p_dao.getEmpPositionListByEmpID(get_emp.getEmpId());
+        Assertions.assertEquals(get_pos.size(), 1);
 
         // delete test data
         p_dao.deleteEmpPosition(emp_pos1);
