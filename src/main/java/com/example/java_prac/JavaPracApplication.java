@@ -19,7 +19,7 @@ public class JavaPracApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(JavaPracApplication.class, args);
 
-		UnitDAO u_dao = DAOFactory.getInstance().getUnitDAO();
+		/*UnitDAO u_dao = DAOFactory.getInstance().getUnitDAO();
 		EmployeeDAO e_dao = DAOFactory.getInstance().getEmployeeDAO();
 		EmpPositionDAO p_dao = DAOFactory.getInstance().getEmpPositionDAO();
 
@@ -69,7 +69,7 @@ public class JavaPracApplication {
 				);
 		p_dao.addEmpPosition(emp_pos1);
 		p_dao.addEmpPosition(emp_pos2);
-		p_dao.addEmpPosition(emp_pos3);
+		p_dao.addEmpPosition(emp_pos3);*/
 	}
 
 }

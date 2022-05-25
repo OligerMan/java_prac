@@ -31,7 +31,25 @@
                 document.getElementById("division_data").innerHTML = xhr.response
             };
         };
-        update_division_data();
+
+        let get_subdivision_list = function() {
+            let xhr = new XMLHttpRequest();
+            let url = new URL("https://google.com/search");
+            let val = find_get_parameter("division_id")
+            if (val != null && val.length !== 0) {
+                url.searchParams.set('higher_id', val);
+            }
+            xhr.open("GET", "get_div_list" + url.toString().substring(25));
+            xhr.send();
+            xhr.onload = function () {
+                document.getElementById("subdivision_list").innerHTML = xhr.response};
+        };
+
+        let onload_func = function () {
+            get_subdivision_list();
+            update_division_data();
+        };
+        window.onload = onload_func
     </script>
 </head>
 <body>
@@ -46,6 +64,8 @@
     </div>
     <div class="content">
         <div id="division_data"></div>
+        <h2>Список нижестоящих подразделений:</h2>
+        <div id="subdivision_list"></div>
         <h2>Обновить или удалить данные о подразделении:</h2>
         <input type="button" id="update_button" value="Обновить">
         <script>

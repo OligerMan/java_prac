@@ -78,7 +78,10 @@ class WebRequestsHandler {
             @RequestParam(required = false) String dir_info
     ) {
         dir_info = dir_info.substring(4);
-        int dir_id = Integer.parseInt(dir_info.substring(0, dir_info.indexOf(' ')));
+        int dir_id = -1;
+        if (!dir_info.equals("-1")) {
+            dir_id = Integer.parseInt(dir_info.substring(0, dir_info.indexOf(' ')));
+        }
         UnitEntity unit1 = new UnitEntity(0, dir_id, -1, name);
         unitDAO.addUnit(unit1);
 
@@ -105,9 +108,15 @@ class WebRequestsHandler {
             @RequestParam(required = false) String higher_info
     ) {
         emp_info = emp_info.substring(4);
-        Integer emp_id = Integer.parseInt(emp_info.substring(0, emp_info.indexOf(' ')));
+        int emp_id = -1;
+        if (!emp_info.equals("-1")) {
+            emp_id = Integer.parseInt(emp_info.substring(0, emp_info.indexOf(' ')));
+        }
         higher_info = higher_info.substring(4);
-        Integer higher_id = Integer.parseInt(higher_info.substring(0, higher_info.indexOf(' ')));
+        int higher_id = -1;
+        if (!higher_info.equals("-1")) {
+            higher_id = Integer.parseInt(higher_info.substring(0, higher_info.indexOf(' ')));
+        }
 
         UnitDAOImpl.Filter filter = new UnitDAOImpl.Filter();
         filter.setId(Long.parseLong(div_id));
@@ -190,6 +199,11 @@ class WebRequestsHandler {
         List<UnitEntity> unit_list = unitDAO.getUnitListByFilter(filter);
 
         StringBuilder output = new StringBuilder();
+        output.append("<option>")
+                .append("ID: ")
+                .append(-1)
+                .append(" ")
+                .append("</option>\n");
         for (UnitEntity unit : unit_list) {
             output.append("<option>")
                     .append("ID: ")
@@ -209,6 +223,11 @@ class WebRequestsHandler {
         List<EmployeeEntity> unit_list = employeeDAO.getEmployeeListByFilter(filter);
 
         StringBuilder output = new StringBuilder();
+        output.append("<option>")
+                .append("ID: ")
+                .append(-1)
+                .append(" ")
+                .append("</option>\n");
         for (EmployeeEntity unit : unit_list) {
             output.append("<option>")
                     .append("ID: ")
@@ -346,7 +365,7 @@ class WebRequestsHandler {
 
         output.append("</table>");
         output.append("<h2>История должностей</h2>\n");
-        output.append("<table>\n");
+        output.append("<table id=\"emp_pos_table\">\n");
         output.append("<tr><th>ID</th><th>Название должности</th><th>Начало работы</th><th>Конец работы</th></tr>\n");
         output.append(ep_info);
         output.append("</table>");
